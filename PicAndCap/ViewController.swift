@@ -20,6 +20,22 @@ class ViewController: UITableViewController, UIImagePickerControllerDelegate, UI
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .camera, target: self, action: #selector(addPicAndCap))
     }
     
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return interests.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Interest", for:indexPath)
+        
+        let interest = interests[indexPath.item]
+        
+        cell.textLabel?.text = interest.name
+        
+        return cell
+    }
+    
+    
+    
     @objc func addPicAndCap() {
         let picker = UIImagePickerController()
         
@@ -52,7 +68,7 @@ class ViewController: UITableViewController, UIImagePickerControllerDelegate, UI
         
         let interest = Interest(name: "set caption", image: imageName)
         interests.append(interest)
-        //tableView.reloadData()
+        tableView.reloadData()
         save()
         
         
