@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UITableViewController {
+class ViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,7 +19,19 @@ class ViewController: UITableViewController {
     }
     
     @objc func addPicAndCap() {
+        let picker = UIImagePickerController()
         
+        if UIDevice.isSimulator {
+            picker.sourceType = .photoLibrary
+        } else {
+            picker.sourceType = .camera
+        }
+        
+        ///allow croping of selected image
+        picker.allowsEditing = true
+        ///setting self as delegate. Need to conform to UIImagePickerControllerDelegate protocol and the UINavigationControllerDelegate protocol
+        picker.delegate = self
+        present(picker, animated: true)
     }
 
 
