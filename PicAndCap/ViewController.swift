@@ -18,6 +18,21 @@ class ViewController: UITableViewController, UIImagePickerControllerDelegate, UI
         self.view.backgroundColor = .red
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .camera, target: self, action: #selector(addPicAndCap))
+        
+        ///load array from disk when app runs
+        let defaults = UserDefaults.standard
+        
+        ///get optional data
+        if let savedInterests = defaults.object(forKey: "interests") as? Data {
+            let jsonDecoder = JSONDecoder()
+            
+            do {
+                ///hand it to jsonDecoder to convert it back to object graph
+                interests = try jsonDecoder.decode([Interest].self, from:savedInterests)
+            } catch {
+                print("failed to load interests")
+            }
+        }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
