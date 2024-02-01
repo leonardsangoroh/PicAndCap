@@ -71,6 +71,7 @@ class ViewController: UITableViewController, UIImagePickerControllerDelegate, UI
         tableView.reloadData()
         save()
         
+        dismiss(animated:true)
         
     }
     
