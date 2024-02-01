@@ -9,6 +9,8 @@ import UIKit
 
 class ViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
+    var interests = [Interest]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -33,7 +35,43 @@ class ViewController: UITableViewController, UIImagePickerControllerDelegate, UI
         picker.delegate = self
         present(picker, animated: true)
     }
-
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        ///pullout and typecast image from the Image Picker
+        guard let image = info[.editedImage] as? UIImage else {return}
+        
+        ///create UUID object and use its property to extract the unique identifier as a string data type
+        let imageName = UUID().uuidString
+        let imagePath = getDocumentsDirectory().appendingPathComponent(imageName)
+        
+        ///convert UIImage to Data object so it can be saved
+        if let jpegData = image.jpegData(compressionQuality: 0.8) {
+            ///write image to disk
+            try? jpegData.write(to: imagePath)
+        }
+        
+        let interest = Interest(name: "set caption", image: imageName)
+        interests.append(interest)
+        //tableView.reloadData()
+        save()
+        
+        
+    }
+    
+    func getDocumentsDirectory()-> URL {
+        ///asks for documents directory, secont parameter adds that we want the path to be relative to the user's home directory
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        ///returns an array that nearly always contains only one thing
+        return paths[0]
+    }
+    
+    func save() {
+        let jsonEncoder = JSONEncoder()
+        if let savedData = try? jsonEncoder.encode(interests) {
+            let defaults = UserDefaults.standard
+            defaults.set(savedData, forKey: "interests")
+        }
+    }
 
 }
 
