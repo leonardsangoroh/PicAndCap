@@ -49,6 +49,20 @@ class ViewController: UITableViewController, UIImagePickerControllerDelegate, UI
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let vc = storyboard?.instantiateViewController(withIdentifier: "Interest") as? InterestViewController {
+            
+            let interest = interests[indexPath.item]
+            //let path = getDocumentsDirectory().appendingPathComponent(interest.image)
+            
+            //vc.selectedImage?.image = path.path
+            vc.selectedImage = interest.image
+            navigationController?.pushViewController(vc, animated: true)
+        }
+        
+        tableView.reloadData()
+    }
+    
     
     
     @objc func addPicAndCap() {
@@ -83,8 +97,8 @@ class ViewController: UITableViewController, UIImagePickerControllerDelegate, UI
         
         let interest = Interest(name: "set caption", image: imageName)
         interests.append(interest)
-        tableView.reloadData()
         save()
+        tableView.reloadData()
         
         dismiss(animated:true)
         

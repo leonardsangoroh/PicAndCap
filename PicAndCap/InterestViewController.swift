@@ -19,9 +19,29 @@ class InterestViewController: UIViewController {
         // Do any additional setup after loading the view.
         navigationItem.largeTitleDisplayMode = .never
         
+        print(selectedImage)
         if let imageToLoad = selectedImage {
-            imageView.image = UIImage(named: imageToLoad)
+            print(imageToLoad)
+            let path = getDocumentsDirectory().appendingPathComponent(imageToLoad)
+            imageView.image = UIImage(contentsOfFile: path.path)
+        } else {
+            fatalError("Cannot find Photo to Load")
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.hidesBarsOnTap = true
+        
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.hidesBarsOnTap = false
+    }
+    
+    func getDocumentsDirectory()->URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        return paths[0]
     }
     
 
